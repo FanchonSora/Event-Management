@@ -1,28 +1,27 @@
 "use client";
 
-import firebase from "@/firebaseClient/firebase";
 import {
-    getAuth,
     signInWithEmailAndPassword,
-    onAuthStateChanged
 } from "firebase/auth";
-import { useState } from "react";
+
+import { auth } from "@/firebaseClient/firebase";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
 
 export default function Auth() {
-
-    const auth = getAuth(firebase);
+    const { user } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    onAuthStateChanged(auth, (user) => {
+    
+    useEffect(() => {
         if (user) {
             console.log(user);
         }
-    })
+    }, [])
 
     const signIn = async () => {
         try {
-            const user = await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
         }
     }
