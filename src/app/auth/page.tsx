@@ -7,22 +7,27 @@ import {
 import { auth } from "@/firebaseClient/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Auth() {
     const { user } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    
+    const router = useRouter();
+
     useEffect(() => {
         if (user) {
-            console.log(user);
+            router.push("/home");
         }
     }, [])
 
     const signIn = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const user = await signInWithEmailAndPassword(auth, email, password);
+            console.log(user);
+            router.push("/home");
         } catch (error) {
+            console.error(error);
         }
     }
 
