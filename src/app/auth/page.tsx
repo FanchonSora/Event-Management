@@ -10,6 +10,8 @@ import { auth } from "@/firebaseClient/firebase";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { sign } from 'crypto';
 
 export default function Auth() {
     const { user } = useAuth();
@@ -28,6 +30,14 @@ export default function Auth() {
             const user = await signInWithEmailAndPassword(auth, email, password);
             console.log(user);
             router.push("/home");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const signInWithGoogle = async () => {
+        try {
+            const res = await signInWithPopup(auth, new GoogleAuthProvider())
         } catch (error) {
             console.error(error);
         }
@@ -58,8 +68,8 @@ export default function Auth() {
                     />
                     <input onClick={signIn} value="Sign in" type="submit" className="sign-in-button" />
                     <div className="icon-container"> 
-                        <img src="https://img.icons8.com/ios/452/google-logo.png" alt="google" className="google-icon" />
-                        <img src="https://img.icons8.com/ios/452/facebook-new.png" alt="facebook" className="facebook-icon" />
+                        <img src="https://img.icons8.com/ios/452/google-logo.png" alt="google" className="google-icon hover:cursor-pointer" onClick={signInWithGoogle} />
+                        <img src="https://img.icons8.com/ios/452/facebook-new.png" alt="facebook" className="facebook-icon hover:cursor-pointer" />
                     </div>
                 </form>
             </div>
