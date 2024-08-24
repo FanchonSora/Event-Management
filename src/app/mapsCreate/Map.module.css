@@ -1,0 +1,30 @@
+/* Map.module.css */
+
+.mapContainer {
+  height: 100vh; /* Full viewport height */
+  width: 100%; /* Full width */
+  position: relative; /* Ensure buttons are positioned relative to this container */
+}
+
+.buttonContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #0070f3; /* Background color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #005bb5; /* Darker color on hover */
+}
