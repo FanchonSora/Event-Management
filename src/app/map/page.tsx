@@ -4,8 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer } from '@react-google-maps/api';
 import { db, auth } from '@/firebaseClient/firebase'; // Import initialized Firebase instances
 import { getFirestore, doc, updateDoc, addDoc, query, where, getDocs, collection, getDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { googleMapsApiKey } from '@react-google-maps/api'; // Ensure you import it correctly
+import { getAuth } from 'firebase/auth'; 
 
 interface MapPageProps {
   eventLocation: string;
@@ -122,7 +121,7 @@ const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
 
   return (
     <div>
-      <LoadScript googleMapsApiKey={googleMapsApiKey}>
+      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY}>
       <GoogleMap
         mapContainerStyle={{ height: '100vh', width: '100%' }}
         center={currentPosition || eventPosition || { lat: 37.4223, lng: -122.0848 }}
