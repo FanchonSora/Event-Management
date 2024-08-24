@@ -1,73 +1,84 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { db, auth } from '@/firebaseClient/firebase'; // Import initialized Firebase instances
-import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import styles from './Main_event.module.css';
+import { db } from '@/firebaseClient/firebase';
 
-interface MainEventPageProps {
-  eventId: string;
-  isSubmitted: boolean;
-}
-
-const MainEventPage: React.FC<MainEventPageProps> = ({ eventId, isSubmitted }) => {
-  const [isJoined, setIsJoined] = useState(isSubmitted);
-  const router = useRouter(); // Initialize router
+const MainEventPage: React.FC<{ eventId: string }> = ({ eventId }) => {
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const checkJoinStatus = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userId = user.uid;
-        const eventsRef = collection(db, 'events');
-        const q = query(eventsRef, where('admins', 'array-contains', user.email));
-        const querySnapshot = await getDocs(q);
+    const fetchEvent = async () => {
+      try {
+        const docRef = doc(db, 'events', eventId);
+        const docSnap = await getDoc(docRef);
 
-        querySnapshot.forEach((doc) => {
-          if (doc.id === eventId) {
-            setIsJoined(true);
-          }
-        });
+        if (docSnap.exists()) {
+          console.log("Event data:", docSnap.data());
+          setEvent(docSnap.data());
+        } else {
+          console.log("No such event!");
+          setError("Event not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+        setError("Error fetching event.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    checkJoinStatus();
+    fetchEvent();
   }, [eventId]);
 
-  const handleJoinClick = async () => {
-    const user = auth.currentUser;
-    if (user) {
-      const userId = user.uid;
-      const eventRef = doc(db, 'events', eventId);
-      const eventDoc = await getDoc(eventRef);
-
-      if (eventDoc.exists()) {
-        const eventData = eventDoc.data();
-        const admins = eventData?.admins || [];
-
-        if (!admins.includes(user.email || '')) {
-          admins.push(user.email || '');
-          await updateDoc(eventRef, { admins });
-
-          setIsJoined(true);
-        }
-      }
-    }
+  const handleMapLoad = (map: google.maps.Map) => {
+    mapRef.current = map;
   };
 
-  const handleRedirect = () => {
-    router.push(`/event/${eventId}`); // Navigate to the event page
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!event) {
+    return <div>Event not found.</div>;
+  }
 
   return (
-    <div>
-      <h1>Event Details</h1>
-      <button onClick={handleJoinClick} disabled={isJoined}>
-        {isJoined ? 'Joined' : 'Join Event'}
-      </button>
-      <button onClick={handleRedirect}>
-        Go to Event Page
+    <div className={styles.mainEventContainer}>
+      <h1 className={styles.title}>{event.name}</h1>
+      {event.imagePath && <img src={event.imagePath} alt={event.name} className={styles.image} />}
+      <div className={styles.details}>
+        <div className={styles.dateTime}>Date: {new Date(event.date.toDate()).toLocaleString()}</div>
+        <div className={styles.location}>Location: {event.location}</div>
+        <div className={styles.description}>Description: {event.description}</div>
+      </div>
+      {event.coordinates && (
+        <div className={styles.mapContainer}>
+          <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
+            <GoogleMap
+              mapContainerStyle={{ height: '100%', width: '100%' }}
+              center={event.coordinates}
+              zoom={14}
+              onLoad={handleMapLoad}
+            >
+              <Marker position={event.coordinates} />
+            </GoogleMap>
+          </LoadScript>
+        </div>
+      )}
+      <button className={styles.joinButton} onClick={() => router.push('/join-event')}>
+        Join Event
       </button>
     </div>
   );

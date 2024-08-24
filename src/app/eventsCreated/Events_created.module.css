@@ -6,6 +6,25 @@
     width: 100%;
     background-color: #0057c228;
     overflow: hidden;
+    position: relative;
+}
+
+.returnButton {
+    position: fixed;
+    top: 4px; /* Adjust this value to move the button higher */
+    left: 20px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000; 
+}
+
+.returnButton:hover {
+    background-color: #005bb5;
 }
 
 .pageWrapper {
@@ -15,7 +34,8 @@
     background-color: #0057c228;
     width: 100%;
     height: 7vh;
-    position: relative; /* Ensures button is positioned relative to this container */
+    justify-content: flex-end; /* Align title to the right */
+    padding-right: 20px; /* Optional padding for spacing */
 }
 
 .pageTitle {
@@ -23,8 +43,6 @@
     font-weight: 700;
     color: #ffffff;
     margin: 1rem;
-    flex: 1;
-    text-align: right; /* Align title to the right */
 }
 
 .eventsContainer {
@@ -65,22 +83,4 @@
 
 .viewEventButton:hover {
     background-color: #0048a1;
-}
-
-.returnButton {
-    position: fixed;
-    top: 5px; /* Adjusted value to move the button higher */
-    left: 20px;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 1000;
-}
-
-.returnButton:hover {
-    background-color: #005bb5;
 }
