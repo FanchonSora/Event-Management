@@ -14,7 +14,6 @@ import { auth } from "@/firebaseClient/firebase";
 import type { EventProps } from "../../../types";
 import { Menu } from "@mui/icons-material";
 
-import { sign } from "crypto";
 
 export default function Home() {
 
