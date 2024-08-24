@@ -1,10 +1,11 @@
 "use client";
 
 import './LoginPage.css';
-import { Person } from "@mui/icons-material";
+import { BorderAll, BorderColor, Person } from "@mui/icons-material";
 import {
     signInWithEmailAndPassword,
 } from "firebase/auth";
+import { colors, TextField } from '@mui/material';
 
 import { auth } from "@/firebaseClient/firebase";
 import { useAuth } from "@/context/AuthContext";
@@ -15,6 +16,21 @@ export default function Auth() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     
+    const styling = { style: { borderRadius: "20px", color: "white", border: "white" } };
+    const sx = { 
+        '& .MuiInputBase-root': {
+            '& fieldset': {
+                borderWidth: '2px',
+                BorderColor: 'white',
+            },
+            '&.Mui-focused fieldset': {
+                borderWidth: '2px',
+                BorderColor: 'white',
+
+            }
+        }       
+    }
+
     useEffect(() => {
         if (user) {
             console.log(user);
@@ -35,22 +51,25 @@ export default function Auth() {
                 <h1 className="appName">Sign In Form</h1>
                 <p className="appDescription">Login to your account</p>
                 <form className="sign-in-form" onSubmit={(e) => { e.preventDefault(); signIn(); }}>
-                    <input
-                        type="email"
-                        placeholder="Email"
+                    <TextField
                         value={email}
-                        className="text-black email"
+                        className="text-field"
                         onChange={(e) => setEmail(e.target.value)}
+                        size='medium'
+                        label="Email"
+                        InputProps={styling}
+                        sx={sx}
                     />
-                    
         
                     {/* <Person /> */}
-                    <input
-                        type="password"
-                        placeholder="Password"
+                    <TextField
                         value={password}
-                        className="text-black"
+                        className="text-field"
+                        label="Password"
                         onChange={(e) => setPassword(e.target.value)}
+                        InputProps={styling}
+
+                        sx={sx}
                     />
                     <input onClick={signIn} value="Sign in" type="submit" className="sign-in-button" />
                     <div className="icon-container"> 
