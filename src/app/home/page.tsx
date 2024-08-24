@@ -5,8 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { db } from "@/firebaseClient/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
-
+import './HomePage.css';
+import EventContainer from "../../components/EventContainer";
 import type { EventProps } from "../../../types";
+import { Menu } from "@mui/icons-material";
+
 
 export default function Home() {
 
@@ -19,9 +22,9 @@ export default function Home() {
         if (!user) {
             router.push("/auth");
         }
-        
+
         const unsubscribe = onSnapshot(collection(db, "events"), (snapshot) => {
-            const data = snapshot.docs.map((doc : any) : EventProps => ({ id: doc.id, ...doc.data() }));
+            const data = snapshot.docs.map((doc: any): EventProps => ({ id: doc.id, ...doc.data() }));
             console.log(data);
             setEvents(data);
         })
@@ -30,8 +33,19 @@ export default function Home() {
     }, [router, user])
 
     return (
-        <main>
-            <h1>Sign In</h1>
+        <main className="pageContainer">
+            <div className="page-wrapper"> 
+                <span className="menu-icon"> <Menu /> </span>
+                <header className="page-title">
+                Events
+                </header>
+            </div>
+            <div className="events-container">
+                {events.map((event) => <EventContainer key={event.id} props={event} />)}
+                {events.length === 0 && <p>No events</p>}
+            </div>
+
         </main>
+        
     )
 }
