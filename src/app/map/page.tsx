@@ -1,10 +1,7 @@
-'use client';
-
 import React, { useEffect, useState, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer } from '@react-google-maps/api';
-import { db, auth } from '@/firebaseClient/firebase'; // Import initialized Firebase instances
-import { getFirestore, doc, updateDoc, addDoc, query, where, getDocs, collection, getDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth'; 
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '@/firebaseClient/firebase';
 
 interface MapPageProps {
   eventLocation: string;
@@ -25,7 +22,6 @@ const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
 
       if (eventDoc.exists()) {
         const eventData = eventDoc.data();
-        console.log('Event data:', eventData); // Verify data structure
         const location = eventData?.location;
 
         if (location === "Online") {
@@ -37,33 +33,13 @@ const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
     };
 
     checkEventLocation();
-  }, [db, eventId]);
+  }, [eventId]);
 
   useEffect(() => {
     const handleLocationUpdate = async () => {
       const { coords } = await getCurrentPosition();
       const newPosition = new google.maps.LatLng(coords.latitude, coords.longitude);
       setCurrentPosition(newPosition);
-
-      const userId = auth.currentUser?.uid;
-      if (userId) {
-        const locationRef = collection(db, "location");
-        const q = query(locationRef, where("uid", "==", userId));
-        const snapshot = await getDocs(q);
-
-        if (!snapshot.empty) {
-          await updateDoc(doc(db, "location", snapshot.docs[0].id), {
-            latitude: coords.latitude,
-            longitude: coords.longitude
-          });
-        } else {
-          await addDoc(locationRef, {
-            uid: userId,
-            latitude: coords.latitude,
-            longitude: coords.longitude
-          });
-        }
-      }
     };
 
     handleLocationUpdate();
@@ -77,7 +53,7 @@ const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
     );
 
     return () => navigator.geolocation.clearWatch(locationWatchId);
-  }, [db, auth]);
+  }, []);
 
   useEffect(() => {
     if (currentPosition && eventPosition) {
@@ -121,20 +97,20 @@ const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
 
   return (
     <div>
-      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY}>
-      <GoogleMap
-        mapContainerStyle={{ height: '100vh', width: '100%' }}
-        center={currentPosition || eventPosition || { lat: 37.4223, lng: -122.0848 }}
-        zoom={14}
-        onLoad={handleMapLoad}
-      >
-        {currentPosition && <Marker position={currentPosition} />}
-        {eventPosition && <Marker position={eventPosition} />}
-        {directions && <DirectionsRenderer directions={directions} />}
-      </GoogleMap>
-      <button onClick={handleDirectionsButtonClick}>
-        Get Directions to Event
-      </button>
+      <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ''}>
+        <GoogleMap
+          mapContainerStyle={{ height: '100%', width: '100%' }}
+          center={currentPosition || eventPosition || { lat: 37.4223, lng: -122.0848 }}
+          zoom={14}
+          onLoad={handleMapLoad}
+        >
+          {currentPosition && <Marker position={currentPosition} />}
+          {eventPosition && <Marker position={eventPosition} />}
+          {directions && <DirectionsRenderer directions={directions} />}
+        </GoogleMap>
+        <button onClick={handleDirectionsButtonClick}>
+          Get Directions to Event
+        </button>
       </LoadScript>
     </div>
   );
