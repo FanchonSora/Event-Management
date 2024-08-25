@@ -46,13 +46,26 @@ const EventCreatePage: React.FC = () => {
     }
   };
 
+  const sendNotification = async (eventId: string) => {
+    try {
+      await addDoc(collection(db, 'notifications'), {
+        title: 'New Event Created',
+        description: `A new event with ID ${eventId} has been created.`,
+        timestamp: new Date(),
+      });
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name && description && date && location) {
       try {
         const admins = adminEmail ? [adminEmail] : [];
         
-        await addDoc(collection(db, 'events'), {
+        // Add the new event to the 'events' collection
+        const eventDocRef = await addDoc(collection(db, 'events'), {
           name,
           description,
           date,
@@ -67,6 +80,10 @@ const EventCreatePage: React.FC = () => {
           answer,
           admins,
         });
+
+        // Send notification
+        await sendNotification(eventDocRef.id);
+
         alert('Event created successfully!');
         router.push('/'); // Navigate back to the home page or another page
       } catch (error) {

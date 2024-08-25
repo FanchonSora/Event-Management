@@ -5,12 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { db, storageRef } from "@/firebaseClient/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 import './HomePage.css';
 import EventContainer from "../../components/EventContainer";
-import { ref, getDownloadURL } from "firebase/storage";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseClient/firebase";
-
 import type { EventProps } from "../../../types";
 import { Menu, Notifications, EventAvailable, CheckCircle, AddCircle } from "@mui/icons-material";
 
@@ -20,6 +19,8 @@ export default function Home() {
     const [events, setEvents] = useState<EventProps[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notifications, setNotifications] = useState<{ title: string; description: string }[]>([]);
 
     const handleSignOut = () => {
         localStorage.removeItem("user");
@@ -29,6 +30,10 @@ export default function Home() {
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+    };
+
+    const toggleNotifications = () => {
+        setNotificationsOpen(!notificationsOpen);
     };
 
     useEffect(() => {
@@ -57,6 +62,14 @@ export default function Home() {
         return () => unsubscribe();
     }, [router, user]);
 
+    useEffect(() => {
+        // Example notification data, replace with actual notification fetching logic
+        setNotifications([
+            { title: "Event Reminder", description: "Don't forget about the upcoming event!" },
+            { title: "New Event", description: "A new event has been created. Check it out!" }
+        ]);
+    }, []);
+
     const handleViewEventClick = (eventId: string) => {
         router.push(`/${eventId}`);
     };
@@ -69,15 +82,29 @@ export default function Home() {
             </div>
             {menuOpen && (
                 <div className="menu-container">
-                    <span className="menu-item"><Notifications /> Notifications</span>
-                    <span className="menu-item"><EventAvailable /> My Created Events</span>
-                    <span className="menu-item"><CheckCircle /> Completed Events</span>
+                    <span className="menu-item" onClick={toggleNotifications}>
+                        <Notifications /> Notifications
+                    </span>
+                    <span className="menu-item" onClick={() => router.push('/eventsCreated')}>
+                        <EventAvailable /> My Created Events
+                    </span>
+                    <span className="menu-item" onClick={() => router.push('/eventsCompleted')}>
+                        <CheckCircle /> Completed Events
+                    </span>
                     <span className="menu-item" onClick={() => router.push('/eventsCreate')}>
                         <AddCircle /> Create Event
                     </span>
                     <span className="menu-item" onClick={handleSignOut}>Sign Out</span>
                 </div>
             )}
+            <div className={`notifications-container ${notificationsOpen ? 'active' : ''}`}>
+                {notifications.map((notification, index) => (
+                    <div key={index} className="notification-container">
+                        <h3 className="notification-title">{notification.title}</h3>
+                        <p className="notification-description">{notification.description}</p>
+                    </div>
+                ))}
+            </div>
             <div className="events-container">
                 {events.map((event) => (
                     <div key={event.id} className="event-container">
