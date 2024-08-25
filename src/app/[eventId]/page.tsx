@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // Ensure this is correct for your Next.js version
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import styles from './Main_event.module.css';
@@ -13,14 +13,19 @@ const MainEventPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const params = useParams();
+  const { eventId } = useParams(); // Ensure this is correct for your setup
   const router = useRouter();
-  const eventId = params.eventId as string;
-  
+
+  const safeEventId = Array.isArray(eventId) ? eventId[0] : eventId;
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const docRef = doc(db, 'events', eventId);
+        if (!safeEventId) {
+          setError("Event ID is missing.");
+          return;
+        }
+        const docRef = doc(db, 'events', safeEventId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -39,7 +44,7 @@ const MainEventPage: React.FC = () => {
     };
 
     fetchEvent();
-  }, []);
+  }, [safeEventId]);
 
   const handleMapLoad = (map: google.maps.Map) => {
     mapRef.current = map;
@@ -59,6 +64,12 @@ const MainEventPage: React.FC = () => {
 
   return (
     <div className={styles.mainEventContainer}>
+      <button
+        className={styles.returnButton}
+        onClick={() => router.back()} // Navigate back to the previous page
+      >
+        Home
+      </button>
       <h1 className={styles.title}>{event.name}</h1>
       {event.imagePath && <img src={event.imagePath} alt={event.name} className={styles.image} />}
       <div className={styles.details}>
@@ -80,7 +91,10 @@ const MainEventPage: React.FC = () => {
           </LoadScript>
         </div>
       )}
-      <button className={styles.joinButton} onClick={() => router.push('/join-event')}>
+      <button
+        className={styles.joinButton}
+        onClick={() => router.push(`/${safeEventId}/game`)} // Ensure this is the correct route
+      >
         Join Event
       </button>
     </div>

@@ -48,3 +48,21 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.returnButton {
+  position: fixed;
+  top: 5px; /* Adjusted value to move the button higher */
+  left: 20px;
+  background-color: #005f6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+.returnButton:hover {
+  background-color: #005f6b;
+}

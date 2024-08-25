@@ -54,7 +54,9 @@ export default function CompletedEventsPage() {
                     completedEvents.length > 0 ? (
                         completedEvents.map((event) => (
                             <div key={event.id} className={styles.eventContainer}>
-                                <EventContainer props={event} />
+                                <EventContainer props={event} onClick={function (): void {
+                                    throw new Error("Function not implemented.");
+                                } } />
                                 <button
                                     className={styles.viewEventButton}
                                     onClick={() => handleViewEventClick(event.id)}
