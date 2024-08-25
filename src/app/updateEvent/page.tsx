@@ -76,58 +76,77 @@ const EventUpdatePage: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Update Event</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label>
-          Event Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Date:
-          <input
-            type="datetime-local"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Location:
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Image Path:
-          <input
-            type="text"
-            value={imagePath}
-            onChange={(e) => setImagePath(e.target.value)}
-          />
-        </label>
-        <div className={styles.buttonContainer}>
-          <button type="button" onClick={() => router.push('/mapsCreate')}>Update Location</button>
-          <button type="submit">Update Event</button>
+    <main>
+      <div className={styles.header}>
+        <header className={styles.title}>Update Event</header>
+      </div>
+
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div>
+              <label>
+                Event Name:
+                <input className={styles.inputField}
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Description:
+                <textarea className={styles.inputField}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Date:
+                <input className={styles.inputField}
+                  type="datetime-local"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
+              </label>
+
+            </div>
+            <div>
+              <label>
+                Location:
+                <input className={styles.inputField}
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            <label>
+              Image Path:
+              <input className={styles.inputField}
+                type="text"
+                value={imagePath}
+                onChange={(e) => setImagePath(e.target.value)}
+              />
+            </label>
+            <div>
+            </div>
+            <div className={styles.buttonContainer}>
+              <button type="button" onClick={() => router.push('/mapsCreate')}>Update Location</button>
+              <button type="submit">Update Event</button>
+            </div>
+          </form>
+
         </div>
-      </form>
-    </div>
+      </div>
+    </main>
   );
 };
 
