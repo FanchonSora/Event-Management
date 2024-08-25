@@ -6,6 +6,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import styles from './Main_event.module.css';
 import { db } from '@/firebaseClient/firebase';
+import { LinearProgress, Box } from '@mui/material';
 
 const MainEventPage: React.FC = () => {
   const [event, setEvent] = useState<any>(null);
@@ -45,7 +46,7 @@ const MainEventPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Box sx={{ width: '100%' }}><LinearProgress /></Box>;
   }
 
   if (error) {

@@ -118,13 +118,7 @@ export default function Home() {
                 <div className="events-container">
                     {events.map((event) => (
                         <div key={event.id} className="event-container-outer">
-                            <EventContainer props={event} />
-                            <button
-                                className="view-event-button"
-                                onClick={() => handleViewEventClick(event.id)}
-                            >
-                                View Event
-                            </button>
+                            <EventContainer props={event} onClick={() => handleViewEventClick(event.id)} />
                         </div>
                     ))}
                     {events.length === 0 && <p>No events</p>}

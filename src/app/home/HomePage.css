@@ -67,7 +67,9 @@
     margin-top: 20px;
 }
 
-.event-container-outer {
+/* .event-container-outer {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -79,7 +81,7 @@
     box-shadow: 0 0 15px 0 rgb(255, 255, 255);
     min-width: 300px;
     min-height: 50px;
-}
+} */
 
 .view-event-button {
     background-color: #0057c2;
