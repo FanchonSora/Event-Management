@@ -8,7 +8,7 @@ export default function EventContainer({ props } : { props: EventProps }) {
             <h1 className="event-title">{props.name}</h1>
             <p className="event-description">{props.description}</p>
             <p className="event-location"> {props.location}</p>
-            <p className="event-time">{props.date.toDate().toDateString()}</p>
+            <p className="event-time">{props.date.toDate().toString()}</p>
         </div>
         
     );

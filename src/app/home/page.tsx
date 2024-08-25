@@ -58,7 +58,7 @@ export default function Home() {
     }, [router, user]);
 
     const handleViewEventClick = (eventId: string) => {
-        router.push(`/mainEvent?eventId=${eventId}`);
+        router.push(`/${eventId}`);
     };
 
     return (

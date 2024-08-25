@@ -1,24 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { db, auth } from '@/firebaseClient/firebase'; // Import initialized Firebase instances
 import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { useAuth } from '@/context/AuthContext';
 
-interface MainEventPageProps {
-  eventId: string;
-  isSubmitted: boolean;
-}
-
-const MainEventPage: React.FC<MainEventPageProps> = ({ eventId, isSubmitted }) => {
-  const [isJoined, setIsJoined] = useState(isSubmitted);
-  const router = useRouter(); // Initialize router
+const MainEventPage: React.FC = () => {
+  const router = useRouter();
+  const eventId = router.query.eventId;
+  const [isJoined, setIsJoined] = useState(false);
 
   useEffect(() => {
+    if (typeof eventId !== 'string') {
+      router.push('/');
+    }
+
     const checkJoinStatus = async () => {
-      const user = auth.currentUser;
+      const { user } = useAuth(); // Get user from AuthContext
       if (user) {
+
         const userId = user.uid;
         const eventsRef = collection(db, 'events');
         const q = query(eventsRef, where('admins', 'array-contains', user.email));
@@ -38,17 +40,16 @@ const MainEventPage: React.FC<MainEventPageProps> = ({ eventId, isSubmitted }) =
   const handleJoinClick = async () => {
     const user = auth.currentUser;
     if (user) {
-      const userId = user.uid;
-      const eventRef = doc(db, 'events', eventId);
+      const eventRef = doc(db, 'events', typeof eventId === 'string' ? eventId : '');
       const eventDoc = await getDoc(eventRef);
 
       if (eventDoc.exists()) {
         const eventData = eventDoc.data();
-        const admins = eventData?.admins || [];
+        const participants = eventData?.participants || [];
 
-        if (!admins.includes(user.email || '')) {
-          admins.push(user.email || '');
-          await updateDoc(eventRef, { admins });
+        if (!participants.includes(user.email)) {
+          participants.push(user.email || '');
+          await updateDoc(eventRef, { participants });
 
           setIsJoined(true);
         }
@@ -56,19 +57,12 @@ const MainEventPage: React.FC<MainEventPageProps> = ({ eventId, isSubmitted }) =
     }
   };
 
-  const handleRedirect = () => {
-    router.push(`/event/${eventId}`); // Navigate to the event page
-  };
-
   return (
     <div>
-      <h1>Event Details</h1>
       <button onClick={handleJoinClick} disabled={isJoined}>
         {isJoined ? 'Joined' : 'Join Event'}
       </button>
-      <button onClick={handleRedirect}>
-        Go to Event Page
-      </button>
+
     </div>
   );
 };

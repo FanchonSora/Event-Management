@@ -1,8 +1,10 @@
 export type EventProps = {
     completed: boolean,
     completedEmail: string[],
+    code: string,
     admins: string[],
-    asnwer: string,
+    participants: string[],
+    answer: string,
     date: Timestamp,
     imagePath: string,
     description: string,
