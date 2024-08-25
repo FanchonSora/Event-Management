@@ -67,10 +67,7 @@
     margin-top: 20px;
 }
 
-.event-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.event-container-outer {
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;

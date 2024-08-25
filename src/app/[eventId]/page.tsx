@@ -1,19 +1,21 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import styles from './Main_event.module.css';
 import { db } from '@/firebaseClient/firebase';
 
-const MainEventPage: React.FC<{ eventId: string }> = ({ eventId }) => {
+const MainEventPage: React.FC = () => {
   const [event, setEvent] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const mapRef = useRef<google.maps.Map | null>(null);
+  const params = useParams();
   const router = useRouter();
-
+  const eventId = params.eventId as string;
+  
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -36,7 +38,7 @@ const MainEventPage: React.FC<{ eventId: string }> = ({ eventId }) => {
     };
 
     fetchEvent();
-  }, [eventId]);
+  }, []);
 
   const handleMapLoad = (map: google.maps.Map) => {
     mapRef.current = map;
@@ -59,7 +61,7 @@ const MainEventPage: React.FC<{ eventId: string }> = ({ eventId }) => {
       <h1 className={styles.title}>{event.name}</h1>
       {event.imagePath && <img src={event.imagePath} alt={event.name} className={styles.image} />}
       <div className={styles.details}>
-        <div className={styles.dateTime}>Date: {new Date(event.date.toDate()).toLocaleString()}</div>
+        <div className={styles.dateTime}>Date: {new Date(event.date).toLocaleString()}</div>
         <div className={styles.location}>Location: {event.location}</div>
         <div className={styles.description}>Description: {event.description}</div>
       </div>

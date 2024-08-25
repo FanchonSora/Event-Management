@@ -1,7 +1,6 @@
 export type EventProps = {
     completed: boolean,
     completedEmail: string[],
-    code: string,
     admins: string[],
     participants: string[],
     answer: string,
@@ -11,7 +10,7 @@ export type EventProps = {
     id: string,
     location: string,
     name: string,
-    quizz: string,
+    quiz: string,
     userId: string,
     [key: string]: any
 }

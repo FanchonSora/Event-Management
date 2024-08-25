@@ -12,12 +12,13 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseClient/firebase";
 import type { EventProps } from "../../../types";
 import { Menu, Notifications, EventAvailable, CheckCircle, AddCircle } from "@mui/icons-material";
+import { LinearProgress, Box } from "@mui/material";
 
 export default function Home() {
     const router = useRouter();
     const { user } = useAuth();
     const [events, setEvents] = useState<EventProps[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [notifications, setNotifications] = useState<{ title: string; description: string }[]>([]);
@@ -51,11 +52,13 @@ export default function Home() {
                 }
                 return ({ id: doc.id, ...current });
             });
-
-            setIsLoading(true);
+            
             Promise.all(data).then((data) => {
                 setEvents(data);
-                setIsLoading(false);
+                setIsLoading(() => {
+                    console.log("Loaded")
+                    return false;
+                });
             });
         });
 
@@ -77,7 +80,7 @@ export default function Home() {
     return (
         <main className="pageContainer">
             <div className="page-wrapper">
-                <span className="menu-icon" onClick={toggleMenu}><Menu /></span>
+                <span className="menu-icon absolute" onClick={toggleMenu}><Menu /></span>
                 <header className="page-title">Events</header>
             </div>
             {menuOpen && (
@@ -105,20 +108,28 @@ export default function Home() {
                     </div>
                 ))}
             </div>
-            <div className="events-container">
-                {events.map((event) => (
-                    <div key={event.id} className="event-container">
-                        <EventContainer props={event} />
-                        <button
-                            className="view-event-button"
-                            onClick={() => handleViewEventClick(event.id)}
-                        >
-                            View Event
-                        </button>
-                    </div>
-                ))}
-                {events.length === 0 && <p>No events</p>}
-            </div>
+            {
+                isLoading ? 
+
+                <Box sx={{ width: '100%' }}>
+                    <LinearProgress />
+                </Box> :
+
+                <div className="events-container">
+                    {events.map((event) => (
+                        <div key={event.id} className="event-container-outer">
+                            <EventContainer props={event} />
+                            <button
+                                className="view-event-button"
+                                onClick={() => handleViewEventClick(event.id)}
+                            >
+                                View Event
+                            </button>
+                        </div>
+                    ))}
+                    {events.length === 0 && <p>No events</p>}
+                </div>
+            }
         </main>
     );
 }
