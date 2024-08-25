@@ -7,6 +7,7 @@ import { db } from "@/firebaseClient/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import styles from "./Events_completed.module.css";
 import EventContainer from "../../components/EventContainer";
+import { LinearProgress, Box } from "@mui/material";
 
 export default function CompletedEventsPage() {
     const router = useRouter();
@@ -22,21 +23,30 @@ export default function CompletedEventsPage() {
 
         const userEmail = user.email;
 
+        if (!userEmail) {
+            console.error('User email is not available');
+            return;
+        }
+
         const q = query(collection(db, "events"), where("completedEmail", "array-contains", userEmail));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const eventsData = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
+
             setCompletedEvents(eventsData);
+            setIsLoading(false);
+        }, (error) => {
+            console.error('Error fetching events:', error);
             setIsLoading(false);
         });
 
         return () => unsubscribe();
     }, [router, user]);
 
-    const handleViewEventClick = (eventId: string) => {
-        router.push(`/mainEvent?eventId=${eventId}`);
+    const handleUpdateEventClick = (eventId: string) => {
+        router.push(`/updateEvent?eventId=${eventId}`);
     };
 
     return (
@@ -44,32 +54,33 @@ export default function CompletedEventsPage() {
             <button className={styles.returnButton} onClick={() => router.push('/')}>
                 Home
             </button>
-            <div className={styles.pageWrapper}>
-                <header className={styles.pageTitle}>My Completed Events</header>
-            </div>
-            <div className={styles.eventsContainer}>
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : (
-                    completedEvents.length > 0 ? (
+            <header className={styles.pageTitle}>My Completed Events</header>
+            {
+                isLoading ? 
+                <Box sx={{ width: '100%' }}>
+                    <LinearProgress />
+                </Box> :
+                <div className={styles.eventsContainer}>
+                    {completedEvents.length > 0 ? (
                         completedEvents.map((event) => (
                             <div key={event.id} className={styles.eventContainer}>
-                                <EventContainer props={event} onClick={function (): void {
-                                    throw new Error("Function not implemented.");
-                                } } />
+                                <EventContainer 
+                                    props={event} 
+                                    onClick={() => handleUpdateEventClick(event.id)} // Provide onClick prop
+                                />
                                 <button
                                     className={styles.viewEventButton}
-                                    onClick={() => handleViewEventClick(event.id)}
+                                    onClick={() => handleUpdateEventClick(event.id)}
                                 >
-                                    View Event
+                                    Update Event
                                 </button>
                             </div>
                         ))
                     ) : (
                         <p>No completed events</p>
-                    )
-                )}
-            </div>
+                    )}
+                </div>
+            }
         </main>
     );
 }

@@ -9,7 +9,7 @@ import { ref, getDownloadURL } from "firebase/storage";
 import styles from './Events_created.module.css'; // CSS module for styling
 import EventContainer from "../../components/EventContainer";
 import { EventProps } from "../../../types";
-import { Button } from "@mui/material";
+import { LinearProgress, Box } from "@mui/material";
 
 export default function UserCreatedEvents() {
     const router = useRouter();
@@ -47,8 +47,8 @@ export default function UserCreatedEvents() {
         return () => unsubscribe();
     }, [router, user]);
 
-    const handleViewEventClick = (eventId: string) => {
-        router.push(`/mainEvent?eventId=${eventId}`);
+    const handleUpdateEventClick = (eventId: string) => {
+        router.push(`/updateEvent?eventId=${eventId}`);
     };
 
     return (
@@ -57,20 +57,33 @@ export default function UserCreatedEvents() {
             <div className={styles.pageWrapper}>
                 <header className={styles.pageTitle}>My Created Events</header>
             </div>
-            <div className={styles.eventsContainer}>
-                {events.map((event) => (
-                    <div key={event.id} className={styles.eventContainer}>
-                        <EventContainer props={event} />
-                        <button
-                            className={styles.viewEventButton}
-                            onClick={() => handleViewEventClick(event.id)}
-                        >
-                            View Event
-                        </button>
-                    </div>
-                ))}
-                {events.length === 0 && <p>No events</p>}
-            </div>
+            {
+                isLoading ? 
+                <Box sx={{ width: '100%' }}>
+                    <LinearProgress />
+                </Box> :
+                <div className={styles.eventsContainer}>
+                    {events.length > 0 ? (
+                        events.map((event) => (
+                            <div key={event.id} className={styles.eventContainer}>
+                                <EventContainer 
+                                    props={event} onClick={function (): void {
+                                        throw new Error("Function not implemented.");
+                                    } }                                    // Add onClick handler if needed
+                                />
+                                <button
+                                    className={styles.viewEventButton}
+                                    onClick={() => handleUpdateEventClick(event.id)}
+                                >
+                                    Update Event
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No events</p>
+                    )}
+                </div>
+            }
         </main>
     );
 }
