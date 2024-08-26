@@ -47,10 +47,6 @@ export default function UserCreatedEvents() {
         return () => unsubscribe();
     }, [router, user]);
 
-    const handleUpdateEventClick = (eventId: string) => {
-        router.push(`/updateEvent?eventId=${eventId}`);
-    };
-
     return (
         <main className={styles.pageContainer}>
             <button className={styles.returnButton} onClick={() => router.push('/')}>Home</button>
@@ -67,9 +63,8 @@ export default function UserCreatedEvents() {
                         events.map((event) => (
                             <div key={event.id} className={styles.eventContainer}>
                                 <EventContainer 
-                                    props={event} onClick={function (): void {
-                                        throw new Error("Function not implemented.");
-                                    } }                                    // Add onClick handler if needed
+                                    props={event} 
+                                    onClick={() => router.push(`/updateEvent?eventId=${event.id}`)} 
                                 />
                             </div>
                         ))

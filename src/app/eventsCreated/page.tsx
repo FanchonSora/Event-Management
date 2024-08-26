@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { db, storageRef } from "@/firebaseClient/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
-import styles from './Events_created.module.css'; // CSS module for styling
+import styles from './Events_created.module.css';
 import EventContainer from "../../components/EventContainer";
 import { EventProps } from "../../../types";
 import { LinearProgress, Box } from "@mui/material";
@@ -69,14 +69,14 @@ export default function UserCreatedEvents() {
                                 <EventContainer 
                                     props={event} onClick={function (): void {
                                         throw new Error("Function not implemented.");
-                                    } }                                    // Add onClick handler if needed
-                                />
+                                    } }                                />
                                 <button
                                     className={styles.viewEventButton}
                                     onClick={() => handleUpdateEventClick(event.id)}
                                 >
                                     Update Event
                                 </button>
+                                
                             </div>
                         ))
                     ) : (

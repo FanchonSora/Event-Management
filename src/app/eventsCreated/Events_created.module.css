@@ -1,4 +1,3 @@
-/* Events_created.module.css */
 
 .pageContainer {
     display: flex;
@@ -8,68 +7,71 @@
     width: 100%;
     background-color: #0057c228;
     overflow: hidden;
+}
+
+/* Wrapper for the header and return button */
+.pageWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #0057c228;
+    width: 100%;
+    height: 7vh;
     position: relative;
 }
 
+/* Title styling */
+.pageTitle {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 1rem;
+    flex: 1;
+    text-align: right;
+}
+
+/* Container for event cards with scroll functionality */
+.eventsContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for multiple rows */
+    justify-content: space-between; /* Space between cards */
+    width: 100%;
+    height: calc(100vh - 7vh); /* Adjust height to fit remaining space */
+    overflow-y: scroll; /* Enable vertical scroll */
+    padding: 10px;
+}
+
+/* Individual event card styling */
+.eventContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(50% - 25px); /* Two cards per row with space between */
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #0057c228;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Styling for the return button */
 .returnButton {
     position: fixed;
-    top: 4px; /* Adjust this value to move the button higher */
+    top: 5px;
     left: 20px;
-    background-color: #0070f3;
+    background-color: #0057c228;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    z-index: 1000; 
+    z-index: 1000;
 }
 
+/* Return button hover effect */
 .returnButton:hover {
     background-color: #005bb5;
-}
-
-
-.pageTitle {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 20px;
-}
-
-.eventsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.eventContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 80%;
-    max-width: 1200px; /* Adjust as needed */
-    border-radius: 20px;
-    padding: 1rem;
-}
-
-.viewEventButton {
-    background-color: #0057c2;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.viewEventButton:hover {
-    background-color: #0048a1;
 }
