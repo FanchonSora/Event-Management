@@ -7,6 +7,7 @@ import { getAuth } from 'firebase/auth';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import styles from './Event_creation.module.css';
 
+
 const EventCreatePage: React.FC = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -46,26 +47,13 @@ const EventCreatePage: React.FC = () => {
     }
   };
 
-  const sendNotification = async (eventId: string) => {
-    try {
-      await addDoc(collection(db, 'notifications'), {
-        title: 'New Event Created',
-        description: `A new event with ID ${eventId} has been created.`,
-        timestamp: new Date(),
-      });
-    } catch (error) {
-      console.error('Error sending notification:', error);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name && description && date && location) {
       try {
         const admins = adminEmail ? [adminEmail] : [];
-        
-        // Add the new event to the 'events' collection
-        const eventDocRef = await addDoc(collection(db, 'events'), {
+
+        await addDoc(collection(db, 'events'), {
           name,
           description,
           date,
@@ -80,10 +68,6 @@ const EventCreatePage: React.FC = () => {
           answer,
           admins,
         });
-
-        // Send notification
-        await sendNotification(eventDocRef.id);
-
         alert('Event created successfully!');
         router.push('/'); // Navigate back to the home page or another page
       } catch (error) {
@@ -99,79 +83,85 @@ const EventCreatePage: React.FC = () => {
       <button className={styles.returnButton} onClick={() => router.push('/home')}>
         Home
       </button>
+      
       <div className={styles.content}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
-            Event Name:
-            <input
+          <div className={styles.createElements}>
+            <label>Event Name:</label>
+            <input className={styles.inputField}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Description:
-            <textarea
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Description:</label>
+            <textarea className={styles.inputField}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Date:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Date:</label>
+            <input className={styles.inputField}
               type="datetime-local"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Location:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Location:</label>
+            <input className={styles.inputField}
               type="text"
               value={location}
               readOnly
               required
             />
-          </label>
-          <label>
-            Image Path:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Image Path:</label>
+            <input className={styles.inputField}
               type="text"
               value={imagePath}
               onChange={(e) => setImagePath(e.target.value)}
             />
-          </label>
-          <label>
-            Quiz Question:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Quiz Question:</label>
+            <input className={styles.inputField}
               type="text"
               value={quizz}
               onChange={(e) => setQuizz(e.target.value)}
             />
-          </label>
-          <label>
-            Answer:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Answer:</label>
+            <input className={styles.inputField}
               type="text"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
             />
-          </label>
-          <label>
-            Admin Email:
-            <input
+          </div>
+
+          <div className={styles.createElements}>
+            <label>Admin Email:</label>
+            <input className={styles.inputField}
               type="email"
               value={adminEmail}
               onChange={(e) => setAdminEmail(e.target.value)}
             />
-          </label>
-          <div className={styles.buttonContainer}>
-            <button type="submit" className={styles.submitButton}>Create Event</button>
           </div>
         </form>
+
         <div className={styles.mapSection}>
           <div className={styles.mapContainer}>
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}>
@@ -191,7 +181,12 @@ const EventCreatePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <div className={styles.createEventButtonContainer}>
+        <button type="submit" className={styles.submitButton} form="eventForm">Create Event</button>
+      </div>
     </div>
+
   );
 };
 

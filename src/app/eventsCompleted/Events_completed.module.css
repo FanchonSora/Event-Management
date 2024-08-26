@@ -42,26 +42,8 @@
     margin-top: 20px;
     margin-bottom: 20px;
     width: 70vw;
-    background-color: #f5f5f53a;
     border-radius: 20px;
     padding: 1rem;
-    box-shadow: 0 0 15px 0 rgb(255, 255, 255);
-}
-
-.viewEventButton {
-    background-color: #0057c2;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.viewEventButton:hover {
-    background-color: #0048a1;
 }
 
 .returnButton {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { db, storageRef } from "@/firebaseClient/firebase";
@@ -12,7 +12,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseClient/firebase";
 import type { EventProps } from "../../../types";
 import { Menu, Notifications, EventAvailable, CheckCircle, AddCircle } from "@mui/icons-material";
-import { LinearProgress, Box } from "@mui/material";
+import { LinearProgress, Box, TextField, Button } from "@mui/material";
 
 export default function Home() {
     const router = useRouter();
@@ -21,7 +21,16 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notificationInputOpen, setNotificationInputOpen] = useState(false);
     const [notifications, setNotifications] = useState<{ title: string; description: string }[]>([]);
+    const [newNotification, setNewNotification] = useState({ title: '', description: '' });
+
+    const contentWrapperRef = useRef<HTMLDivElement>(null);
+    const scrollbarThumbRef = useRef<HTMLDivElement>(null);
+
+    const handleViewEventClick = (eventId: string) => {
+        router.push(`/${eventId}`);
+    };
 
     const handleSignOut = () => {
         localStorage.removeItem("user");
@@ -35,6 +44,18 @@ export default function Home() {
 
     const toggleNotifications = () => {
         setNotificationsOpen(!notificationsOpen);
+    };
+
+    const toggleNotificationInput = () => {
+        setNotificationInputOpen(!notificationInputOpen);
+    };
+
+    const handleNotificationSubmit = () => {
+        if (newNotification.title && newNotification.description) {
+            setNotifications([...notifications, newNotification]);
+            setNewNotification({ title: '', description: '' });
+            setNotificationInputOpen(false);
+        }
     };
 
     useEffect(() => {
@@ -56,7 +77,7 @@ export default function Home() {
             Promise.all(data).then((data) => {
                 setEvents(data);
                 setIsLoading(() => {
-                    console.log("Loaded")
+                    console.log("Loaded");
                     return false;
                 });
             });
@@ -73,9 +94,57 @@ export default function Home() {
         ]);
     }, []);
 
-    const handleViewEventClick = (eventId: string) => {
-        router.push(`/${eventId}`);
-    };
+    useEffect(() => {
+        const handleScroll = () => {
+            if (contentWrapperRef.current && scrollbarThumbRef.current) {
+                const content = contentWrapperRef.current;
+                const thumb = scrollbarThumbRef.current;
+                const contentHeight = content.scrollHeight;
+                const containerHeight = content.clientHeight;
+                const scrollTop = content.scrollTop;
+
+                const thumbHeight = Math.max((containerHeight / contentHeight) * containerHeight, 30); // Minimum height for thumb
+                const thumbTop = (scrollTop / (contentHeight - containerHeight)) * (containerHeight - thumbHeight);
+
+                thumb.style.height = `${thumbHeight}px`;
+                thumb.style.top = `${thumbTop}px`;
+            }
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (scrollbarThumbRef.current && contentWrapperRef.current) {
+                const thumb = scrollbarThumbRef.current;
+                const content = contentWrapperRef.current;
+                const thumbTop = Math.max(0, Math.min(e.clientY - thumb.offsetHeight / 2, content.scrollHeight - content.clientHeight));
+                thumb.style.top = `${thumbTop}px`;
+                content.scrollTop = (thumbTop / (content.scrollHeight - content.clientHeight)) * content.scrollHeight;
+            }
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        const handleMouseDown = (e: MouseEvent) => {
+            e.preventDefault();
+            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener("mouseup", handleMouseUp);
+        };
+
+        const thumb = scrollbarThumbRef.current;
+        thumb?.addEventListener("mousedown", handleMouseDown);
+
+        if (contentWrapperRef.current) {
+            const content = contentWrapperRef.current;
+            content.addEventListener("scroll", handleScroll);
+            handleScroll(); // Initial update
+            return () => {
+                content.removeEventListener("scroll", handleScroll);
+                thumb?.removeEventListener("mousedown", handleMouseDown);
+            };
+        }
+    }, []);
 
     return (
         <main className="pageContainer">
@@ -97,6 +166,9 @@ export default function Home() {
                     <span className="menu-item" onClick={() => router.push('/eventsCreate')}>
                         <AddCircle /> Create Event
                     </span>
+                    <span className="menu-item" onClick={toggleNotificationInput}>
+                        <AddCircle /> Create Notification
+                    </span>
                     <span className="menu-item" onClick={handleSignOut}>Sign Out</span>
                 </div>
             )}
@@ -108,22 +180,50 @@ export default function Home() {
                     </div>
                 ))}
             </div>
-            {
-                isLoading ? 
-
-                <Box sx={{ width: '100%' }}>
-                    <LinearProgress />
-                </Box> :
-
-                <div className="events-container">
-                    {events.map((event) => (
-                        <div key={event.id} className="event-container-outer">
-                            <EventContainer props={event} onClick={() => handleViewEventClick(event.id)} />
-                        </div>
-                    ))}
-                    {events.length === 0 && <p>No events</p>}
+            {notificationInputOpen && (
+                <div className={`notification-input-container ${notificationInputOpen ? 'active' : ''}`}>
+                    <TextField
+                        label="Title"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={newNotification.title}
+                        onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
+                    />
+                    <TextField
+                        label="Description"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        multiline
+                        rows={4}
+                        value={newNotification.description}
+                        onChange={(e) => setNewNotification({ ...newNotification, description: e.target.value })}
+                    />
+                    <Button variant="contained" color="primary" onClick={handleNotificationSubmit}>
+                        Add Notification
+                    </Button>
                 </div>
-            }
+            )}
+            <div className="content-wrapper" ref={contentWrapperRef}>
+                {
+                    isLoading ? 
+                    <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                    </Box> :
+                    <div className="events-container">
+                        {events.map((event) => (
+                            <div key={event.id} className="event-container-outer">
+                                <EventContainer props={event} onClick={() => handleViewEventClick(event.id)} />
+                            </div>
+                        ))}
+                        {events.length === 0 && <p>No events</p>}
+                    </div>
+                }
+            </div>
+            <div className="scrollbar-container">
+                <div className="scrollbar-thumb" ref={scrollbarThumbRef} />
+            </div>
         </main>
     );
 }

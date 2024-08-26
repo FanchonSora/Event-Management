@@ -61,7 +61,6 @@
   position: fixed;
   top: 28px; /* Adjusted value to move the button higher */
   left: 20px;
-  background-color: #092033;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -72,5 +71,5 @@
 }
 
 .returnButton:hover {
-  background-color: #092033;
+  background-color: #124773;
 }

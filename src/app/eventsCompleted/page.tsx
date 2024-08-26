@@ -3,17 +3,19 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { db } from "@/firebaseClient/firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import styles from "./Events_completed.module.css";
+import { db, storageRef } from "@/firebaseClient/firebase";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import styles from './Events_completed.module.css'; // CSS module for styling
 import EventContainer from "../../components/EventContainer";
+import { EventProps } from "../../../types";
 import { LinearProgress, Box } from "@mui/material";
 
-export default function CompletedEventsPage() {
+export default function UserCreatedEvents() {
     const router = useRouter();
     const { user } = useAuth();
-    const [completedEvents, setCompletedEvents] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [events, setEvents] = useState<EventProps[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -21,26 +23,26 @@ export default function CompletedEventsPage() {
             return;
         }
 
-        const userEmail = user.email;
+        const unsubscribe = onSnapshot(
+            query(collection(db, "events"), where("completedEmail", "==", user.email)),
+            async (snapshot) => {
+                const data = snapshot.docs.map(async (doc: any): Promise<EventProps> => {
+                    const current = doc.data();
+                    if (current.imagePath && current.imagePath !== "") {
+                        const imageRef = ref(storageRef, doc.data().imagePath);
+                        const imageUrl = await getDownloadURL(imageRef);
+                        current.imagePath = imageUrl;
+                    }
+                    return ({ id: doc.id, ...current });
+                });
 
-        if (!userEmail) {
-            console.error('User email is not available');
-            return;
-        }
-
-        const q = query(collection(db, "events"), where("completedEmail", "array-contains", userEmail));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const eventsData = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-
-            setCompletedEvents(eventsData);
-            setIsLoading(false);
-        }, (error) => {
-            console.error('Error fetching events:', error);
-            setIsLoading(false);
-        });
+                setIsLoading(true);
+                Promise.all(data).then((data) => {
+                    setEvents(data);
+                    setIsLoading(false);
+                });
+            }
+        );
 
         return () => unsubscribe();
     }, [router, user]);
@@ -51,33 +53,28 @@ export default function CompletedEventsPage() {
 
     return (
         <main className={styles.pageContainer}>
-            <button className={styles.returnButton} onClick={() => router.push('/')}>
-                Home
-            </button>
-            <header className={styles.pageTitle}>My Completed Events</header>
+            <button className={styles.returnButton} onClick={() => router.push('/')}>Home</button>
+            <div className={styles.pageWrapper}>
+                <header className={styles.pageTitle}>My Completed Events</header>
+            </div>
             {
                 isLoading ? 
                 <Box sx={{ width: '100%' }}>
                     <LinearProgress />
                 </Box> :
                 <div className={styles.eventsContainer}>
-                    {completedEvents.length > 0 ? (
-                        completedEvents.map((event) => (
+                    {events.length > 0 ? (
+                        events.map((event) => (
                             <div key={event.id} className={styles.eventContainer}>
                                 <EventContainer 
-                                    props={event} 
-                                    onClick={() => handleUpdateEventClick(event.id)} // Provide onClick prop
+                                    props={event} onClick={function (): void {
+                                        throw new Error("Function not implemented.");
+                                    } }                                    // Add onClick handler if needed
                                 />
-                                <button
-                                    className={styles.viewEventButton}
-                                    onClick={() => handleUpdateEventClick(event.id)}
-                                >
-                                    Update Event
-                                </button>
                             </div>
                         ))
                     ) : (
-                        <p>No completed events</p>
+                        <p>No events</p>
                     )}
                 </div>
             }
