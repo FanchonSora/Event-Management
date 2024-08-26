@@ -75,3 +75,25 @@
 .returnButton:hover {
     background-color: #005bb5;
 }
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Styling for the buttons remains the same */
+.viewEventButton {
+    background-color: #0057c228;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.viewEventButton:hover {
+    background-color: #005bb5;
+}
