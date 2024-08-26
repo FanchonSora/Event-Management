@@ -1,9 +1,9 @@
 /* Container for the content with the scrollbar */
 .content-wrapper {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 100vh; /* Adjust as needed */
-    overflow: hidden;
+    overflow: auto; /* Enable scrolling */
 }
 
 /* The scrollable content area */
@@ -45,7 +45,7 @@
     height: 100vh;
     width: 100%;
     background-color: #0057c228;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .page-wrapper {
@@ -99,36 +99,38 @@
     margin-right: 8px;
     font-size: 1.5rem; /* Increased icon size in the menu */
 }
-.eventsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.event-container-outer {
-    margin-bottom: 20px; /* Adjust spacing between event containers */
-    width: 100%;
-    display: flex;
-    justify-content: center; /* Center the event container horizontally */
-}
-
-.event-container-inner {
-    width: 80%; /* Adjust as needed */
-    max-width: 800px; /* Adjust as needed */
-}
-
+/* Container for the events */
 .events-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 70vw;
-    border-radius: 20px;
-    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr); /* Default to 1 column on small screens */
+    gap: 10px; /* Space between grid items */
+    width: 100%; /* Full width of the container */
+    padding: 10px; /* Padding around the container */
 }
+
+/* Media query for tablets and medium screens */
+@media (min-width: 768px) {
+    .events-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    }
+}
+
+/* Media query for larger screens */
+@media (min-width: 1200px) {
+    .events-container {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+    }
+}
+
+/* Individual event container */
+.event-container-outer {
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width of each grid column */
+}
+
+
 
 .view-event-button {
     background-color: #0057c2;
