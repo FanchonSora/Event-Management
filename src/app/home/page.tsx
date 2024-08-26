@@ -73,7 +73,7 @@ export default function Home() {
                 }
                 return ({ id: doc.id, ...current });
             });
-            
+
             Promise.all(data).then((data) => {
                 setEvents(data);
                 setIsLoading(() => {
@@ -207,18 +207,18 @@ export default function Home() {
             )}
             <div className="content-wrapper" ref={contentWrapperRef}>
                 {
-                    isLoading ? 
-                    <Box sx={{ width: '100%' }}>
-                        <LinearProgress />
-                    </Box> :
-                    <div className="events-container">
+                    isLoading ?
+                        <Box sx={{ width: '100%' }}>
+                            <LinearProgress />
+                        </Box> :
+                        <div className="events-container">
                         {events.map((event) => (
                             <div key={event.id} className="event-container-outer">
                                 <EventContainer props={event} onClick={() => handleViewEventClick(event.id)} />
                             </div>
                         ))}
-                        {events.length === 0 && <p>No events</p>}
                     </div>
+                    
                 }
             </div>
             <div className="scrollbar-container">
