@@ -3,6 +3,9 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 90vh;
+  margin-top: 5vh;
+  overflow: auto;
 }
 
 .title {
@@ -13,6 +16,7 @@
   padding: 16px;
   border-radius: 8px;
   text-align: right;
+  margin: 5vh 0;
 }
 
 .loading {

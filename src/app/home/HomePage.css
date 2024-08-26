@@ -105,7 +105,7 @@
     grid-template-columns: repeat(1, 1fr); /* Default to 1 column on small screens */
     gap: 10px; /* Space between grid items */
     width: 100%; /* Full width of the container */
-    padding: 10px; /* Padding around the container */
+    padding: 2vh 6vw 2vh 6vw; /* Padding around the container */
 }
 
 /* Media query for tablets and medium screens */

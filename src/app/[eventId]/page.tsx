@@ -7,6 +7,9 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import styles from './Main_event.module.css';
 import { db } from '@/firebaseClient/firebase';
 import { LinearProgress, Box } from '@mui/material';
+import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
+import LocationOn from '@mui/icons-material/LocationOn';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const MainEventPage: React.FC = () => {
   const [event, setEvent] = useState<any>(null);
@@ -73,9 +76,18 @@ const MainEventPage: React.FC = () => {
       <h1 className={styles.title}>{event.name}</h1>
       {event.imagePath && <img src={event.imagePath} alt={event.name} className={styles.image} />}
       <div className={styles.details}>
-        <div className={styles.dateTime}>Date: {new Date(event.date).toLocaleString()}</div>
-        <div className={styles.location}>Location: {event.location}</div>
-        <div className={styles.description}>Description: {event.description}</div>
+        <div className={styles.dateTime}>
+          <QueryBuilderIcon className={styles.icons}/>
+          {new Date(event.date).toLocaleString()}
+        </div>
+        <div className={styles.location}>
+          <LocationOn className={styles.icons} />
+          {event.location}
+        </div>
+        <div className={styles.description}>
+          <DescriptionIcon className={styles.icons} />
+          {event.description}
+        </div>
       </div>
       {event.coordinates && (
         <div className={styles.mapContainer}>
