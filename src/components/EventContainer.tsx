@@ -22,7 +22,22 @@ export default function EventContainer({ props, onClick }: { props: EventProps, 
     };
 
     return (
-        <Card variant="outlined" sx={{ width: 320 }}>
+        <Card variant="outlined"  sx={{
+            width: 320,
+            border: '2px solid transparent', // Base border style
+            position: 'relative', // Needed for absolute positioning of the pseudo-element
+            '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: -5,
+                left: -5,
+                right: -5,
+                bottom: -5,
+                borderRadius: 'inherit',
+                boxShadow: '0 0 15px rgba(0, 150, 255, 0.7)', 
+                zIndex: -1, 
+            },
+        }}>
             <CardOverflow>
                 <AspectRatio>
                     <img src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318" alt={props.name} loading="lazy" />
