@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation'; // Ensure this is correct for your Next.js version
+import { useParams, useRouter } from 'next/navigation';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import styles from './Main_event.module.css';
 import { db } from '@/firebaseClient/firebase';
 import { LinearProgress, Box } from '@mui/material';
@@ -15,11 +16,24 @@ const MainEventPage: React.FC = () => {
   const [event, setEvent] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
+  const [hasJoined, setHasJoined] = useState<boolean>(false);
   const mapRef = useRef<google.maps.Map | null>(null);
-  const { eventId } = useParams(); // Ensure this is correct for your setup
+  const { eventId } = useParams();
   const router = useRouter();
+  const auth = getAuth();
 
   const safeEventId = Array.isArray(eventId) ? eventId[0] : eventId;
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setCurrentUserEmail(user.email);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -34,6 +48,11 @@ const MainEventPage: React.FC = () => {
         if (docSnap.exists()) {
           console.log("Event data:", docSnap.data());
           setEvent(docSnap.data());
+          const eventData = docSnap.data();
+          const users = eventData.users || [];
+          if (currentUserEmail) {
+            setHasJoined(users.includes(currentUserEmail));
+          }
         } else {
           console.log("No such event!");
           setError("Event not found.");
@@ -47,7 +66,39 @@ const MainEventPage: React.FC = () => {
     };
 
     fetchEvent();
-  }, [safeEventId]);
+  }, [safeEventId, currentUserEmail]);
+
+  const handleJoinEvent = async () => {
+    if (!safeEventId || !currentUserEmail) return;
+
+    try {
+      const eventRef = doc(db, 'events', safeEventId);
+      const docSnap = await getDoc(eventRef);
+
+      if (!docSnap.exists()) {
+        setError("Event not found.");
+        return;
+      }
+
+      const eventData = docSnap.data();
+      const users = eventData.users || [];
+
+      if (users.includes(currentUserEmail)) {
+        alert("You have already joined this event.");
+        return;
+      }
+
+      await updateDoc(eventRef, {
+        users: arrayUnion(currentUserEmail),
+        joined: increment(1),
+      });
+      setHasJoined(true);
+      router.push(`/${safeEventId}/game`); // Navigate to the game page
+    } catch (error) {
+      console.error("Error joining event:", error);
+      setError("Failed to join the event.");
+    }
+  };
 
   const handleMapLoad = (map: google.maps.Map) => {
     mapRef.current = map;
@@ -69,7 +120,7 @@ const MainEventPage: React.FC = () => {
     <div className={styles.mainEventContainer}>
       <button
         className={styles.returnButton}
-        onClick={() => router.back()} // Navigate back to the previous page
+        onClick={() => router.back()}
       >
         Home
       </button>
@@ -77,7 +128,7 @@ const MainEventPage: React.FC = () => {
       {event.imagePath && <img src={event.imagePath} alt={event.name} className={styles.image} />}
       <div className={styles.details}>
         <div className={styles.dateTime}>
-          <QueryBuilderIcon className={styles.icons}/>
+          <QueryBuilderIcon className={styles.icons} />
           {new Date(event.date).toLocaleString()}
         </div>
         <div className={styles.location}>
@@ -87,6 +138,10 @@ const MainEventPage: React.FC = () => {
         <div className={styles.description}>
           <DescriptionIcon className={styles.icons} />
           {event.description}
+        </div>
+        <div className={styles.rule}>
+          <DescriptionIcon className={styles.icons} />
+          {event.rule}
         </div>
       </div>
       {event.coordinates && (
@@ -103,12 +158,14 @@ const MainEventPage: React.FC = () => {
           </LoadScript>
         </div>
       )}
-      <button
-        className={styles.joinButton}
-        onClick={() => router.push(`/${safeEventId}/game`)} // Ensure this is the correct route
-      >
-        Join Event
-      </button>
+      {!hasJoined && (
+        <button
+          className={styles.joinButton}
+          onClick={handleJoinEvent}
+        >
+          Join Event
+        </button>
+      )}
     </div>
   );
 };

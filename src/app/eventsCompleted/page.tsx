@@ -24,7 +24,7 @@ export default function UserCreatedEvents() {
         }
 
         const unsubscribe = onSnapshot(
-            query(collection(db, "events"), where("completedEmail", "==", user.email)),
+            query(collection(db, "events"), where("completedEmail", "array-contains", user.email)),
             async (snapshot) => {
                 const data = snapshot.docs.map(async (doc: any): Promise<EventProps> => {
                     const current = doc.data();
@@ -64,7 +64,7 @@ export default function UserCreatedEvents() {
                             <div key={event.id} className={styles.eventContainer}>
                                 <EventContainer 
                                     props={event} 
-                                    onClick={() => router.push(`/updateEvent?eventId=${event.id}`)} 
+                                    onClick={() => alert("You already completed this event")} 
                                 />
                             </div>
                         ))

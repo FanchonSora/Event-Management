@@ -55,7 +55,7 @@ export default function EventContainer({ props, onClick }: { props: EventProps, 
                     </Typography>
                     <Divider orientation="vertical" />
                     <Typography level="body-sm" className="flex items-center">
-                        <Person className="me-1" />Registered: 0
+                        <Person className="me-1" />Registered: {props.joined}
                     </Typography>
                 </CardContent>
                 <CardActions>

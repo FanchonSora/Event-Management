@@ -89,8 +89,8 @@ export default function Home() {
     useEffect(() => {
         // Example notification data, replace with actual notification fetching logic
         setNotifications([
-            { title: "Event Reminder", description: "Don't forget about the upcoming event!" },
-            { title: "New Event", description: "A new event has been created. Check it out!" }
+            { title: "Thông báo chạy trạm", description: "Các đội hãy lên chiến lược cũng như đọc kỹ thông tin trò chơi ở các trạm nhé, chúng ta ưu tiên điểm mạnh của đội để giải các câu đố cũng như hoàn thành nhiệm vụ ở các trạm nhé <3" },
+            { title: "Lưu ý", description: "Nếu có sự cố gì về y tế hãy liên lạc cho số điện thoại thông tin ở sau tấm thẻ và thông báo vị trí của đội cho ban tổ chức hỗ trợ !!!" }
         ]);
     }, []);
 

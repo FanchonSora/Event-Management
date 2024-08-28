@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import MyButton from '@/components/MyButton'; // Adjust import path
 import styles from './Game.module.css';
@@ -60,7 +60,7 @@ const GamePage: React.FC = () => {
           {
             userId,
             Completed: answeredCorrectly,
-            completedEmail: userEmail,
+            completedEmail: arrayUnion(userEmail),
             timestamp: serverTimestamp(),
           },
           { merge: true }
