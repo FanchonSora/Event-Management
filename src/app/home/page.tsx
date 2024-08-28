@@ -157,6 +157,9 @@ export default function Home() {
                     <span className="menu-item" onClick={toggleNotifications}>
                         <Notifications /> Notifications
                     </span>
+                    <span className="menu-item" onClick={() => router.push('/campSchedule')}>
+                        <EventAvailable /> Camp Schedule
+                    </span>
                     <span className="menu-item" onClick={() => router.push('/eventsCreated')}>
                         <EventAvailable /> My Created Events
                     </span>
