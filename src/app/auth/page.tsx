@@ -73,18 +73,16 @@ export default function Auth() {
                         InputProps={styling}
                         sx={sx}
                     />
-        
-                    {/* <Person /> */}
                     <TextField
                         value={password}
                         className="text-field"
                         label="Password"
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={styling}
-
                         sx={sx}
                     />
-                    <input onClick={signIn} value="Sign in" type="submit" className="sign-in-button" />
+                    <input onClick={signIn} value="Log in" type="submit" className="log-in-button" />
+                    <button type="button" onClick={() => router.push('/auth/signAccount')} className="sign-up-button">Sign up</button>
                     <div className="icon-container"> 
                         <img src="https://img.icons8.com/ios/452/google-logo.png" alt="google" className="google-icon hover:cursor-pointer" onClick={signInWithGoogle} />
                         <img src="https://img.icons8.com/ios/452/facebook-new.png" alt="facebook" className="facebook-icon hover:cursor-pointer" />
@@ -93,4 +91,5 @@ export default function Auth() {
             </div>
         </main>
     );
+    
 }

@@ -19,7 +19,8 @@
     min-height: 500px;
     overflow: hidden;
 }
-.sign-in-form{
+
+.sign-up-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,18 +28,21 @@
     width: 100%;
     padding: 20px;
 }
-.appName{
+
+.appName {
     font-size: 4rem;
     font-weight: 700;
     color: #0084ff;
     padding: 1rem;
     margin-top: 1rem;
 }
-.appDescription{
+
+.appDescription {
     font-size: 0.7rem;
     font-weight: 500;
     color: #f5f5f5;
-}  
+}
+
 .text-field {
     display: flex;
     margin: 10px;
@@ -46,23 +50,6 @@
     border-radius: 20px;
     width: 80%;
     background-color: #34476b00;
-}
-.text-black:focus {
-    outline: none;
-}
-
-.log-in-button {
-    background-color: #4d85b9;
-    border: 1px solid white;
-    border-radius: 15px;
-    width: 10vw;
-    padding: 5px;
-    margin-top: 2vh;
-}
-
-.log-in-button:hover {
-    background-color: #0053a1;
-    color: white;
 }
 
 .sign-up-button {
@@ -77,27 +64,4 @@
 .sign-up-button:hover {
     background-color: #0053a1;
     color: white;
-}
-.icon-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem;
-}
-.google-icon, .facebook-icon {
-    margin: 10px;
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-}
-.icon {
-    font-size: 2rem; 
-    color: #000;   
-}
-.user-icon {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    font-size: 2rem;
-    color: #000;     
 }
