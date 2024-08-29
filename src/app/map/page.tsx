@@ -5,12 +5,8 @@ import { GoogleMap, LoadScript, Marker, DirectionsRenderer } from '@react-google
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebaseClient/firebase';
 
-interface MapPageProps {
-  eventLocation: string;
-  eventId: string;
-}
 
-const MapPage: React.FC<MapPageProps> = ({ eventLocation, eventId }) => {
+const MapPage = ({ eventLocation, eventId } : any) => {
   const [currentPosition, setCurrentPosition] = useState<google.maps.LatLng | null>(null);
   const [eventPosition, setEventPosition] = useState<google.maps.LatLng | null>(parseLocation(eventLocation));
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
