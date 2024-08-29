@@ -1,19 +1,21 @@
 
-.header{
+.header {
   display: flex;
-  flex-direction: row;
+  justify-content: flex-end; /* Align items to the right */
   align-items: center;
   background-color: #008cff44; 
   width: 100%;
-  height: 7vh;
+  height: 8.5vh;
 }
-.title{
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 1rem 1rem 1rem 0rem;
-    padding-left: 30px;
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-right: 1rem; /* Margin to the right */
+  text-align: right; /* Align text to the right */
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -97,3 +99,19 @@
     margin-top: 20px;
   }
   
+  .returnButton {
+    position: fixed;
+    top: 5px; /* Adjusted value to move the button higher */
+    left: 10px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+  }
+  
+  .returnButton:hover {
+    background-color: #092033;
+  }

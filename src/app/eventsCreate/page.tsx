@@ -85,10 +85,11 @@ const EventCreatePage: React.FC = () => {
       </button>
       
       <div className={styles.content}>
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form} id="eventForm">
           <div className={styles.createElements}>
             <label>Event Name:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -98,7 +99,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Description:</label>
-            <textarea className={styles.inputField}
+            <textarea
+              className={styles.inputField}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
@@ -107,7 +109,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Date:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="datetime-local"
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -117,7 +120,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Location:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="text"
               value={location}
               readOnly
@@ -127,7 +131,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Image Path:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="text"
               value={imagePath}
               onChange={(e) => setImagePath(e.target.value)}
@@ -136,7 +141,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Quiz Question:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="text"
               value={quizz}
               onChange={(e) => setQuizz(e.target.value)}
@@ -145,7 +151,8 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Answer:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="text"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
@@ -154,11 +161,18 @@ const EventCreatePage: React.FC = () => {
 
           <div className={styles.createElements}>
             <label>Admin Email:</label>
-            <input className={styles.inputField}
+            <input
+              className={styles.inputField}
               type="email"
               value={adminEmail}
               onChange={(e) => setAdminEmail(e.target.value)}
             />
+          </div>
+
+          <div className={styles.createEventButtonContainer}>
+            <button type="submit" className={styles.submitButton}>
+              Create Event
+            </button>
           </div>
         </form>
 

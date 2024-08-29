@@ -77,6 +77,7 @@ const EventUpdatePage: React.FC = () => {
 
   return (
     <main>
+      <button className={styles.returnButton} onClick={() => router.push('/')}>Home</button>
       <div className={styles.header}>
         <header className={styles.title}>Update Event</header>
       </div>
@@ -115,7 +116,6 @@ const EventUpdatePage: React.FC = () => {
                   required
                 />
               </label>
-
             </div>
             <div>
               <label>
@@ -136,14 +136,11 @@ const EventUpdatePage: React.FC = () => {
                 onChange={(e) => setImagePath(e.target.value)}
               />
             </label>
-            <div>
-            </div>
             <div className={styles.buttonContainer}>
               <button type="button" onClick={() => router.push('/mapsCreate')}>Update Location</button>
               <button type="submit">Update Event</button>
             </div>
           </form>
-
         </div>
       </div>
     </main>

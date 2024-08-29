@@ -1,0 +1,92 @@
+.mainEventContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #0057c228;
+  height: 100vh;
+  overflow: auto;
+}
+
+.title {
+  margin: 7vh 0 3vh 0;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 3rem;
+}
+
+.image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.icons{
+  font-size: 3.5vh;
+  color: #02aaf8;
+  margin-right: 0.8rem;
+}
+
+.details {
+  width: 100vw;
+  height: auto;
+  max-width: 600px;
+  text-align: center;
+  color: #ffffff;
+  padding: 1.5vh;
+  background-color: #0072fd1f;
+  border-radius: 10px;
+}
+
+.dateTime, .location, .description, .rule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  color: #f7f7f7;
+  margin-bottom: 2vh;
+}
+
+.mapContainer {
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.joinButton {
+  background-color: #006eff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 3vh 0;
+
+}
+.joinButton:hover {
+  background-color: #0057c2;
+}
+
+.returnButton {
+  position: fixed;
+  top: 2vh;
+  left: 3vw;
+  background-color: #006eff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+.returnButton:hover {
+  background-color: #0057c2;
+}

@@ -17,7 +17,8 @@ export default function Auth() {
     const { user } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    
+    const router = useRouter();
+
     const styling = { style: { borderRadius: "20px", color: "white", border: "white" } };
     const sx = { 
         '& .MuiInputBase-root': {

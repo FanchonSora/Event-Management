@@ -1,0 +1,99 @@
+
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #0057c228;
+    overflow: hidden;
+}
+
+/* Wrapper for the header and return button */
+.pageWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #0057c228;
+    width: 100%;
+    height: 7vh;
+    position: relative;
+}
+
+/* Title styling */
+.pageTitle {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 1rem;
+    flex: 1;
+    text-align: right;
+}
+
+/* Container for event cards with scroll functionality */
+.eventsContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for multiple rows */
+    justify-content: space-between; /* Space between cards */
+    width: 100%;
+    height: calc(100vh - 7vh); /* Adjust height to fit remaining space */
+    overflow-y: scroll; /* Enable vertical scroll */
+    padding: 10px;
+}
+
+/* Individual event card styling */
+.eventContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(50% - 25px); /* Two cards per row with space between */
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #0057c228;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Styling for the return button */
+.returnButton {
+    position: fixed;
+    top: 5px;
+    left: 20px;
+    background-color: #0057c228;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+/* Return button hover effect */
+.returnButton:hover {
+    background-color: #005bb5;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Styling for the buttons remains the same */
+.viewEventButton {
+    background-color: #0057c228;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.viewEventButton:hover {
+    background-color: #005bb5;
+}
