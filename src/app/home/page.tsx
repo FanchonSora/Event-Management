@@ -90,6 +90,8 @@ export default function Home() {
         // Example notification data, replace with actual notification fetching logic
         setNotifications([
             { title: "Thông báo chạy trạm", description: "Các đội hãy lên chiến lược cũng như đọc kỹ thông tin trò chơi ở các trạm nhé, chúng ta ưu tiên điểm mạnh của đội để giải các câu đố cũng như hoàn thành nhiệm vụ ở các trạm nhé <3" },
+            { title: "Thông báo chạy trạm", description: "Trạm sẽ có hai phần một là trò chơi hoàn thành ở trạm để nhận được mật thư và giải mật thư nên nếu không thể giải được mật thư hãy di chuyển đến trạm kế tiếp được đề cập" },
+            { title: "Cách sử dụng web", description: "Sẽ có các sự kiện các đội bấm vào 'view event' để biết thêm thông tin cũng như thể lệ cách chơi ở trạm kế tiếp để nghĩ chiến lược, 'join event' chỉ nên bấm vào khi mấy đứa đã hoàn thành xong trò chơi ở trạm và nhận mật thư, nhập đáp án của mật thư vào ô trả lời, nếu đã lỡ bấm vô và out ra thì mấy đứa sẽ bị mất quyền trả lời cho mật thư đó nên cẩn thận !!!" },
             { title: "Lưu ý", description: "Nếu có sự cố gì về y tế hãy liên lạc cho số điện thoại thông tin ở sau tấm thẻ và thông báo vị trí của đội cho ban tổ chức hỗ trợ !!!" }
         ]);
     }, []);

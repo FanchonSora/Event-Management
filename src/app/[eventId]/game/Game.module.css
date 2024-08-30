@@ -63,8 +63,8 @@
 
 .returnButton {
   position: fixed;
-  top: 28px; /* Adjusted value to move the button higher */
-  left: 20px;
+  top: 100px; /* Adjusted value to move the button higher */
+  left: 60px;
   color: white;
   border: none;
   padding: 10px 20px;
